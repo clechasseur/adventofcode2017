@@ -17,8 +17,9 @@ enum class Direction(val c: Char, val displacement: Pt) {
     }
 
     companion object {
-        val displacements: List<Pt>
-            get() = values().map { it.displacement }
+        val displacements: List<Pt> by lazy {
+            values().map { it.displacement }
+        }
     }
 }
 
