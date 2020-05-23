@@ -183,4 +183,40 @@ class AdventOfCode2017 {
             assertEquals(328, Day15.part2())
         }
     }
+
+    class Day16Puzzles {
+        @Test
+        fun `day 16, part 1`() {
+            assertEquals("doeaimlbnpjchfkg", Day16.part1())
+        }
+
+        @Test
+        fun `day 16, part 2`() {
+            assertEquals("agndefjhibklmocp", Day16.part2())
+        }
+    }
+
+    class Day17Puzzles {
+        @Test
+        fun `day 17, part 1`() {
+            assertEquals(640, Day17.part1())
+        }
+
+        @Test
+        fun `day 17, part 2`() {
+            assertEquals(47949463, Day17.part2())
+        }
+    }
+
+    class Day18Puzzles {
+        @Test
+        fun `day 18, part 1`() {
+            assertEquals(2951L, Day18.part1())
+        }
+
+        @Test
+        fun `day 18, part 2`() {
+            assertEquals(7366, Day18.part2())
+        }
+    }
 }
