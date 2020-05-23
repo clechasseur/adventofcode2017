@@ -2,9 +2,9 @@ package org.clechasseur.adventofcode2017
 
 enum class Direction(val c: Char, val displacement: Pt) {
     LEFT('L', Pt(-1, 0)),
-    UP('U', Pt(0, 1)),
+    UP('U', Pt(0, -1)),
     RIGHT('R', Pt(1, 0)),
-    DOWN('D', Pt(0, -1));
+    DOWN('D', Pt(0, 1));
 
     val left: Direction get() = when (this) {
         LEFT -> DOWN
