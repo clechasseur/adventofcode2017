@@ -237,5 +237,11 @@ class AdventOfCode2017 {
         fun `day 20, part 1`() {
             assertEquals(150, Day20.part1())
         }
+
+        @Test
+        @Ignore
+        fun `day 20, part 2`() {
+            assertEquals(657, Day20.part2())
+        }
     }
 }
