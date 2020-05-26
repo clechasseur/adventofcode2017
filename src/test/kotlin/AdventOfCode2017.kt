@@ -253,7 +253,7 @@ class AdventOfCode2017 {
 
         @Test
         fun `day 21, part 2`() {
-            assertEquals(0, Day21.part2())
+            assertEquals(2_606_275, Day21.part2())
         }
     }
 }

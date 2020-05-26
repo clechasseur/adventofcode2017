@@ -116,7 +116,7 @@ object Day21 {
     private const val pattern2Replacement = "$3$1/$4$2"
 
     private val pattern3Regex = Regex("^(.)(.)(.)/(.)(.)(.)/(.)(.)(.)$")
-    private const val pattern3Replacement = "$4$1$2/$7$5$3/$8$9$6"
+    private const val pattern3Replacement = "$7$4$1/$8$5$2/$9$6$3"
 
     private const val initialCanvas = ".#./..#/###"
 
@@ -142,7 +142,7 @@ object Day21 {
     private fun flip(pattern: String): List<String> {
         val flippedVertically = pattern.split('/').reversed().joinToString("/")
         return listOf(pattern, flippedVertically).flatMap { pat ->
-            val flippedHorizontally = pattern.split('/').joinToString("/") { it.reversed() }
+            val flippedHorizontally = pat.split('/').joinToString("/") { it.reversed() }
             listOf(pat, flippedHorizontally)
         }
     }
@@ -150,22 +150,20 @@ object Day21 {
     private fun divide(canvas: String): List<String> {
         val canvasLines = canvas.split('/')
         val divisor = if (canvasLines.size % 2 == 0) 2 else 3
-        val divided = canvasLines.chunked(divisor).flatMap { lines ->
+        return canvasLines.chunked(divisor).flatMap { lines ->
             (lines[0].indices step divisor).map { firstIdx ->
                 (0 until divisor).joinToString("/") { lines[it].substring(firstIdx, firstIdx + divisor) }
             }
         }
-        return divided
     }
 
     private fun assemble(chunks: List<String>): String {
         val chunksPerLine = sqrt(chunks.size.toDouble()).toInt()
-        val assembled = chunks.chunked(chunksPerLine).joinToString("/") { lineChunks ->
+        return chunks.chunked(chunksPerLine).joinToString("/") { lineChunks ->
             val splitLineChunks = lineChunks.map { it.split('/') }
             splitLineChunks[0].indices.joinToString("/") { lineIdx ->
                 splitLineChunks.joinToString("") { it[lineIdx] }
             }
         }
-        return assembled
     }
 }
