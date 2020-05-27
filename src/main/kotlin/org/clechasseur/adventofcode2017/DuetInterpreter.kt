@@ -1,6 +1,6 @@
 package org.clechasseur.adventofcode2017
 
-class DuetInterpreter(programText: String, private val dual: Boolean) {
+class DuetInterpreter(programText: String, private val dual: Boolean, private val release: Boolean = false) {
     private val program = programText.lineSequence().map { it.toInstruction() }.toList()
     private val ram: List<Memory> = when {
         dual -> listOf(Memory(0), Memory(1))
@@ -25,6 +25,10 @@ class DuetInterpreter(programText: String, private val dual: Boolean) {
     }
 
     fun getSndCount(id: Int): Int = ram[id].sndCount
+
+    fun getMulCount(id: Int): Int = ram[id].mulCount
+
+    fun getReg(id: Int, reg: Char): Long = ram[id].get(reg)
 
     private fun runSingle() {
         while (!terminated && recovered == null) {
@@ -53,10 +57,14 @@ class DuetInterpreter(programText: String, private val dual: Boolean) {
         val queue = mutableListOf<Long>()
         var waiting = false
         var sndCount = 0
+        var mulCount = 0
 
         init {
             if (dual) {
                 registers['p'] = id.toLong()
+            }
+            if (release) {
+                registers['a'] = 1
             }
         }
 
@@ -91,6 +99,10 @@ class DuetInterpreter(programText: String, private val dual: Boolean) {
             val (reg, diff) = split(' ').drop(1)
             Add(reg.first(), diff.toFetcher())
         }
+        startsWith("sub ") -> {
+            val (reg, diff) = split(' ').drop(1)
+            Sub(reg.first(), diff.toFetcher())
+        }
         startsWith("mul ") -> {
             val (reg, quotient) = split(' ').drop(1)
             Mul(reg.first(), quotient.toFetcher())
@@ -103,6 +115,10 @@ class DuetInterpreter(programText: String, private val dual: Boolean) {
         startsWith("jgz ") -> {
             val (check, offset) = split(' ').drop(1)
             Jgz(check.toFetcher(), offset.toFetcher())
+        }
+        startsWith("jnz ") -> {
+            val (check, offset) = split(' ').drop(1)
+            Jnz(check.toFetcher(), offset.toFetcher())
         }
         else -> error("Unknown instruction: $this")
     }
@@ -145,9 +161,18 @@ class DuetInterpreter(programText: String, private val dual: Boolean) {
         override fun toString(): String = "add $reg $diff"
     }
 
+    private class Sub(val reg: Char, val diff: Fetcher): Instruction {
+        override fun invoke(ram: Memory) {
+            ram.registers[reg] = ram.get(reg) - diff.fetchValue(ram)
+        }
+
+        override fun toString(): String = "sub $reg $diff"
+    }
+
     private class Mul(val reg: Char, val quotient: Fetcher): Instruction {
         override fun invoke(ram: Memory) {
             ram.registers[reg] = ram.get(reg) * quotient.fetchValue(ram)
+            ram.mulCount++
         }
 
         override fun toString(): String = "mul $reg $quotient"
@@ -188,6 +213,16 @@ class DuetInterpreter(programText: String, private val dual: Boolean) {
         }
 
         override fun toString(): String = "jgz $check $offset"
+    }
+
+    private class Jnz(val check: Fetcher, val offset: Fetcher): Instruction {
+        override fun invoke(ram: Memory) {
+            if (check.fetchValue(ram) != 0L) {
+                ram.ip += offset.fetchValue(ram).toInt() - 1
+            }
+        }
+
+        override fun toString(): String = "jnz $check $offset"
     }
 
     private class ImmediateFetcher(val value: Long): Fetcher {
