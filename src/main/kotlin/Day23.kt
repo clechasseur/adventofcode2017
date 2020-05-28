@@ -38,52 +38,7 @@ object Day23 {
 
     fun part1() = DuetInterpreter(input, false).getMulCount(0)
 
-    fun part2() = kotlinVersion()
-
-    private fun kotlinVersion(): Long {
-        var a = 1L
-        var h = 0L
-        var b = 65L
-        var c = b
-        var f = 0L
-        var d = 0L
-        var e = 0L
-        var g = 0L
-        b *= 100L
-        b += 100000L
-        c = b
-        c += 17000L
-        do {
-            f = 1L
-            d = 2L
-            e = 0L
-            g = 0L
-            do {
-                e = 2L
-                do {
-                    g = d
-                    g *= e
-                    g -= b
-                    if (g == 0L) {
-                        f = 0L
-                    }
-                    e++
-                    g = e
-                    g -= b
-                } while (g != 0L)
-                d++
-                g = d
-                g -= b
-            } while (g != 0L)
-            if (f == 0L) {
-                h++
-            }
-            g = b
-            g -= c
-            if (g != 0L) {
-                b += 17
-            }
-        } while (g != 0L)
-        return h
-    }
+    fun part2() = (106_500L..123_500L step 17).filter { num ->
+        (2L..(num / 2L)).any { num % it == 0L }
+    }.count().toLong()
 }
