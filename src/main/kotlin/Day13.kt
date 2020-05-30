@@ -1,5 +1,3 @@
-import com.sun.org.apache.xpath.internal.operations.Bool
-
 object Day13 {
     private val input = """
         0: 3
